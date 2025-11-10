@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import logo from "../assets/images/logo.svg";
 import { Button } from "./ui/buttons";
@@ -7,7 +6,7 @@ import { Navigation } from "./navigation";
 
 export function MobileHeader() {
   return (
-    <header className="flex flex-col gap-6 px-8 pt-4">
+    <header className="mx-auto flex max-w-[1220px] flex-col gap-6 px-8 pt-4 min-[800px]:hidden">
       <div className="flex items-center justify-between">
         <div>
           <Image className="w-12" src={logo} width={64} height={64} alt="" />
