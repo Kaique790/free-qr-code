@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="mt-12 ml-auto grid max-w-[calc(100vw-(100vw-1220px)/2)] gap-8 md:grid-cols-2 md:grid-rows-[auto_1fr] md:items-start">
+    <div className="mt-12 ml-auto grid max-w-[calc(100vw-(100vw-1140px)/2)] gap-8 md:grid-cols-2 md:grid-rows-[auto_1fr] md:items-start">
       <div className="order-1 md:order-0 md:col-start-1 md:row-start-1">
         <div className="space-y-3">
           <h1 className="text-center text-[3.5rem] leading-none font-bold md:text-left">
@@ -25,7 +25,7 @@ export default function Home() {
         </Button>
       </div>
 
-      <div className="order-3 pl-8 md:order-0 md:col-start-2 md:row-span-2 md:row-start-1">
+      <div className="order-3 pl-8 min-[800px]:pl-0 md:order-0 md:col-start-2 md:row-span-2 md:row-start-1">
         <Image
           className="mt-8 ml-auto w-[90%] max-w-full object-cover"
           src={heroImg}
