@@ -3,7 +3,6 @@ import heroImg from "@/assets/images/hero-mockup.png";
 
 import { Button } from "@/components/ui/buttons";
 import Image from "next/image";
-import { Footer } from "@/components/footer";
 
 export default function Home() {
   return (
@@ -36,7 +35,7 @@ export default function Home() {
       </div>
 
       <div className="px-8">
-        <article className="border-dark overflow-hidden rounded-[2.5rem] border-2">
+        <article className="border-dark mx-auto w-[380px] max-w-full overflow-hidden rounded-[2.5rem] border-2">
           <div className="flex h-[244px] flex-col justify-between px-6 py-8">
             <div className="text-center">
               <h3 className="text-2xl font-medium">QR + LOGO</h3>
