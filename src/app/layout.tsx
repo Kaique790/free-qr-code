@@ -22,7 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${roboto.className} pb-20 antialiased`}>
+      <body
+        className={`${roboto.className} w-full max-w-screen overflow-x-hidden pb-20 antialiased`}
+      >
         <MobileHeader />
         <MdHeader />
         <main>{children}</main>
