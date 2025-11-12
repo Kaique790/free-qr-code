@@ -3,6 +3,7 @@ import Image from "next/image";
 import logo from "../assets/images/logo.svg";
 import { Button } from "./ui/buttons";
 import { Navigation } from "./navigation";
+import Link from "next/link";
 
 export function MdHeader() {
   return (
@@ -14,10 +15,12 @@ export function MdHeader() {
       <Navigation />
 
       <div className="flex gap-4">
-        <Button className="w-24 max-w-full" variant="outline">
-          Login
+        <Button className="w-24 max-w-full" variant="outline" asChild>
+          <Link href="/auth">Login</Link>
         </Button>
-        <Button className="w-32 max-w-full">Criar conta</Button>
+        <Button className="w-32 max-w-full" asChild>
+          <Link href="/auth?signupmode=true">Criar conta</Link>
+        </Button>
       </div>
     </header>
   );

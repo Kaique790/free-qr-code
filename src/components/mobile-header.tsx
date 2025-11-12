@@ -17,8 +17,8 @@ export function MobileHeader() {
           <Button className="w-24 max-w-full" variant="outline" asChild>
             <Link href="/auth">Login</Link>
           </Button>
-          <Button className="w-32 max-w-full">
-            <Link href="/auth">Criar conta</Link>
+          <Button className="w-32 max-w-full" asChild>
+            <Link href="/auth?signupmode=true">Criar conta</Link>
           </Button>
         </div>
       </div>

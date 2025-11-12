@@ -3,7 +3,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import { MobileHeader } from "@/components/mobile-header";
 import { Footer } from "@/components/footer";
-import { MdHeader } from "@/components/md-hero";
+import { MdHeader } from "@/components/md-header";
 
 const roboto = Roboto({
   variable: "--font-roboto",
