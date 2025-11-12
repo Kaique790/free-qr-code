@@ -17,7 +17,6 @@ export function Navigation() {
           <NavLink href="https://github.com/kaique790" target="_blank">
             GitHub
           </NavLink>
-          props
         </li>
       </ul>
     </nav>

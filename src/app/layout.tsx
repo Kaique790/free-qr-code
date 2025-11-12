@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className="max-w-screen overflow-x-hidden">
       <body
         className={`${roboto.className} w-full max-w-screen overflow-x-hidden pb-20 antialiased`}
       >

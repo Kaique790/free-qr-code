@@ -4,10 +4,15 @@
   --color-primary: #64ed3a;
   --color-dark: #000000;
   --color-white: #ffffff;
+  --color-gray-light: #c9c9c9;
+  --color-gray-dark: #4f4f4f;
 }
 
 @theme {
   --color-primary: var(--color-primary);
   --color-dark: var(--color-dark);
   --color-white: var(--color-white);
+  --color-gray-light: var(--color-gray-light);
+  --color-gray-light: var(--color-gray-light);
+  --color-gray-dark: var(--color-gray-dark);
 }

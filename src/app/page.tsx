@@ -10,7 +10,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="mt-12 ml-auto grid max-w-[calc(100vw-(100vw-1200px)/2)] gap-8 min-[800px]:mt-17 min-[800px]:grid-cols-2 min-[800px]:grid-rows-[auto_1fr] min-[800px]:items-start">
+    <div className="mt-12 ml-auto max-w-full gap-8 min-[800px]:mt-17 min-[800px]:grid min-[800px]:grid-cols-2 min-[800px]:grid-rows-[auto_1fr] min-[800px]:items-start md:max-w-[calc(100vw-(100vw-1200px)/2)]">
       <div className="px-8 min-[800px]:order-0 min-[800px]:col-start-1 min-[800px]:row-start-1">
         <div className="flex items-center justify-center gap-2 text-sm opacity-35 min-[800px]:justify-start">
           <span className="bg-primary rounded-full p-1">
