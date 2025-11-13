@@ -1,6 +1,6 @@
 "use client";
 
-import { SignOutIcon } from "@phosphor-icons/react/dist/ssr";
+import { SignInIcon, SignOutIcon } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 
 import signInImg from "@/assets/images/sign-in.png";
@@ -78,7 +78,7 @@ export function AuthClient() {
           >
             {signUpMode ? (
               <>
-                Já tenho conta <SignOutIcon />
+                Já tenho conta <SignInIcon />
               </>
             ) : (
               <>
