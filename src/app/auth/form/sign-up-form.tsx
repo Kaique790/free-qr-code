@@ -1,13 +1,18 @@
 import { Button } from "@/components/ui/buttons";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRightIcon, GoogleLogoIcon } from "@phosphor-icons/react/dist/ssr";
+import {
+  ArrowRightIcon,
+  EyeClosedIcon,
+  EyeIcon,
+  GoogleLogoIcon,
+} from "@phosphor-icons/react/dist/ssr";
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const signUpFormSchema = z
   .object({
@@ -32,6 +37,12 @@ export function SignUpForm() {
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpFormSchema),
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  function toggleShowPassword() {
+    setShowPassword((state) => !state);
+  }
 
   const passwordValue = watch("password");
 
@@ -64,12 +75,27 @@ export function SignUpForm() {
         </div>
         <div className="flex flex-col gap-2 leading-none">
           <label htmlFor="password">Senha</label>
-          <Input
-            {...register("password")}
-            placeholder="********"
-            id="password"
-            type="password"
-          />
+          <div className="relative overflow-hidden">
+            <Input
+              {...register("password")}
+              placeholder="********"
+              id="password"
+              type={showPassword ? "text" : "password"}
+              className="w-full"
+            />
+            <Button
+              onClick={toggleShowPassword}
+              variant={showPassword ? "outline" : "dark"}
+              type="button"
+              className="absolute top-0 right-0 flex h-full w-fit items-center gap-2 text-sm"
+            >
+              {showPassword ? (
+                <EyeIcon size={20} />
+              ) : (
+                <EyeClosedIcon size={20} />
+              )}
+            </Button>
+          </div>
           {errors.password && (
             <span className="text-sm text-rose-500">
               {errors.password.message}
