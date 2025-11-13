@@ -9,9 +9,9 @@ export function MobileHeader() {
   return (
     <header className="mx-auto flex max-w-[1220px] flex-col gap-6 px-8 pt-4 min-[800px]:hidden">
       <div className="flex items-center justify-between">
-        <div>
+        <Link href="/">
           <Image className="w-12" src={logo} width={64} height={64} alt="" />
-        </div>
+        </Link>
 
         <div className="flex gap-4">
           <Button className="w-24 max-w-full" variant="outline" asChild>
