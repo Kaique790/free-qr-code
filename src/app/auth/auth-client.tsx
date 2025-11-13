@@ -7,7 +7,7 @@ import signInImg from "@/assets/images/sign-in.png";
 import signUpImg from "@/assets/images/sign-up.png";
 
 import { useEffect, useEffectEvent, useState } from "react";
-import { AuthForm } from "./auth-form";
+import { AuthFormWrapper } from "./form/auth-form-wrapper";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
@@ -39,7 +39,7 @@ export function AuthClient() {
 
   return (
     <div className="mx-auto mt-12 min-h-screen max-w-[1000px] overflow-hidden px-8">
-      <div className="border-gray-light relative mx-auto flex flex-col justify-between gap-8 rounded-lg border max-md:max-w-[500px] md:h-131.5 md:flex-row md:overflow-hidden">
+      <div className="border-gray-light relative mx-auto flex flex-col justify-between gap-8 rounded-lg border max-md:max-w-[500px] md:h-146 md:flex-row md:overflow-hidden">
         <div
           className={cn(
             "right-1/2 flex min-h-full flex-col items-center justify-between gap-8 py-8 transition-all duration-300 md:absolute md:w-1/2",
@@ -88,7 +88,7 @@ export function AuthClient() {
           </button>
         </div>
 
-        <AuthForm signUpMode={signUpMode} />
+        <AuthFormWrapper signUpMode={signUpMode} />
       </div>
     </div>
   );
