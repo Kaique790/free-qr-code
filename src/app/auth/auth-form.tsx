@@ -13,8 +13,8 @@ export function AuthForm({ signUpMode }: AuthFormProps) {
   return (
     <form
       className={cn(
-        "bg-gray-light/30 border-gray-light left-1/2 h-full min-h-full w-1/2 space-y-6 rounded-lg border-t px-4 py-8 transition-all duration-300 md:absolute md:flex-1 md:border-t-0 md:border-l",
-        signUpMode && "left-0 border-r md:border-l-0",
+        "bg-gray-light/30 border-gray-light left-1/2 h-full min-h-full space-y-6 rounded-lg border-t px-4 py-8 transition-all duration-300 md:absolute md:w-1/2 md:flex-1 md:border-t-0 md:border-l",
+        signUpMode && "left-0 md:border-r md:border-l-0",
       )}
     >
       <div className="flex flex-col gap-6">
