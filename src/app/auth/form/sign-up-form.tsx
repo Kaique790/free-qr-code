@@ -5,14 +5,15 @@ import {
   ArrowRightIcon,
   EyeClosedIcon,
   EyeIcon,
-  GoogleLogoIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { z } from "zod";
+import { email, z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { GoogleBtn } from "./google-btn";
+import { headers } from "next/headers";
 
 const signUpFormSchema = z
   .object({
@@ -44,6 +45,7 @@ export function SignUpForm() {
     setShowPassword((state) => !state);
   }
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const passwordValue = watch("password");
 
   useEffect(() => {
@@ -52,8 +54,31 @@ export function SignUpForm() {
     }
   }, [passwordValue, trigger]);
 
-  function onSubmit(data: SignUpFormData) {
-    console.log(data);
+  async function onSubmit(data: SignUpFormData) {
+    try {
+      const response = await fetch("/api/auth/sign-up", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        alert(result.error || "Erro ao cadastrar.");
+        return;
+      }
+
+      alert("Usuário cadastrado com sucesso!");
+    } catch (err) {
+      console.error(err);
+      alert("Erro inesperado, tente novamente.");
+    }
   }
 
   return (
@@ -127,10 +152,7 @@ export function SignUpForm() {
         <Separator />
       </div>
 
-      <Button type="button" variant="outline" className="w-full">
-        <GoogleLogoIcon size={20} />
-        Cadastrar com google
-      </Button>
+      <GoogleBtn />
     </form>
   );
 }

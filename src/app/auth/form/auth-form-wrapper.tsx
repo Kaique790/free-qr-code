@@ -1,12 +1,12 @@
 import { cn } from "@/lib/utils";
-import { SignUpForm } from "./sign-up-form";
-import { SignInForm } from "./sign-in-form";
+import { ReactNode } from "react";
 
 interface AuthFormProps {
   signUpMode: boolean;
+  children: ReactNode;
 }
 
-export function AuthFormWrapper({ signUpMode }: AuthFormProps) {
+export function AuthFormWrapper({ signUpMode, children }: AuthFormProps) {
   return (
     <div
       className={cn(
@@ -14,7 +14,7 @@ export function AuthFormWrapper({ signUpMode }: AuthFormProps) {
         signUpMode && "left-0 md:border-r md:border-l-0",
       )}
     >
-      {signUpMode ? <SignUpForm /> : <SignInForm />}
+      {children}
     </div>
   );
 }

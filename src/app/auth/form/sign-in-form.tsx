@@ -5,11 +5,11 @@ import {
   ArrowRightIcon,
   EyeClosedIcon,
   EyeIcon,
-  GoogleLogoIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
 import Link from "next/link";
 import { useState } from "react";
+import { GoogleBtn } from "./google-btn";
 
 export function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -51,10 +51,7 @@ export function SignInForm() {
         <Separator />
       </div>
 
-      <Button type="button" variant="outline" className="w-full">
-        <GoogleLogoIcon size={20} />
-        Entrar com google
-      </Button>
+      <GoogleBtn />
 
       <Separator className="w-[100px] opacity-40" />
 

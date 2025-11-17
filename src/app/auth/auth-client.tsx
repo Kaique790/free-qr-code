@@ -6,6 +6,9 @@ import Image from "next/image";
 import signInImg from "@/assets/images/sign-in.png";
 import signUpImg from "@/assets/images/sign-up.png";
 
+import { SignUpForm } from "./form/sign-up-form";
+import { SignInForm } from "./form/sign-in-form";
+
 import { useEffect, useEffectEvent, useState } from "react";
 import { AuthFormWrapper } from "./form/auth-form-wrapper";
 import { useSearchParams } from "next/navigation";
@@ -88,7 +91,9 @@ export function AuthClient() {
           </button>
         </div>
 
-        <AuthFormWrapper signUpMode={signUpMode} />
+        <AuthFormWrapper signUpMode={signUpMode}>
+          {signUpMode ? <SignUpForm /> : <SignInForm />}
+        </AuthFormWrapper>
       </div>
     </div>
   );
