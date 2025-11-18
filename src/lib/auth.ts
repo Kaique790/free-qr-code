@@ -37,7 +37,7 @@ export const { auth, handlers, signIn } = NextAuth({
         const cred = credentials as { email: string; password: string };
 
         if (!cred.email || !cred.password) {
-          throw new Error("Preencha email e senha");
+          return { errorCode: 400, error: "MissingCredentials" };
         }
 
         const user = await prisma.user.findUnique({
@@ -45,7 +45,7 @@ export const { auth, handlers, signIn } = NextAuth({
         });
 
         if (!user || !user.password) {
-          throw new Error("User not found.");
+          return { errorCode: 404, error: "UserNotFound" };
         }
 
         const matchPassword = await bcrypt.compare(
@@ -54,10 +54,13 @@ export const { auth, handlers, signIn } = NextAuth({
         );
 
         if (!matchPassword) {
-          throw new Error("Invalid credentials.");
+          return { errorCode: 401, error: "InvalidCredentials" };
         }
 
-        return user;
+        return {
+          id: user.id,
+          email: user.email,
+        };
       },
     }),
   ],
