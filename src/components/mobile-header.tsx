@@ -14,10 +14,15 @@ export function MobileHeader() {
         </Link>
 
         <div className="flex gap-4">
-          <Button className="w-24 max-w-full" variant="outline" asChild>
+          <Button
+            size="sm"
+            className="w-24 max-w-full"
+            variant="outline"
+            asChild
+          >
             <Link href="/auth">Login</Link>
           </Button>
-          <Button className="w-32 max-w-full" asChild>
+          <Button size="sm" className="w-32 max-w-full" asChild>
             <Link href="/auth?signupmode=true">Criar conta</Link>
           </Button>
         </div>
