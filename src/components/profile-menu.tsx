@@ -1,11 +1,10 @@
-import { useSession } from "next-auth/react";
+import { UserIcon } from "@phosphor-icons/react/dist/ssr";
+import { Button } from "./ui/buttons";
 
 export function ProfileMenu() {
-  const session = useSession();
-
   return (
-    <div>
-      <div>{JSON.stringify(session)}</div>
-    </div>
+    <Button variant="outline">
+      <UserIcon weight="fill" /> Sua conta
+    </Button>
   );
 }

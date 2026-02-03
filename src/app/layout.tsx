@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
-import { MobileHeader } from "@/components/mobile-header";
 import { Footer } from "@/components/footer";
-import { MdHeader } from "@/components/md-header";
+import { Header } from "@/components/header";
+import Providers from "./providers";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -21,15 +21,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className="max-w-screen overflow-x-hidden">
-      <body
-        className={`${roboto.className} w-full max-w-screen overflow-x-hidden pb-20 antialiased`}
-      >
-        <MobileHeader />
-        <MdHeader />
-        <main>{children}</main>
-        <Footer />
-      </body>
-    </html>
+    <Providers>
+      <html lang="pt-BR" className="max-w-screen overflow-x-hidden">
+        <body
+          className={`${roboto.className} w-full max-w-screen overflow-x-hidden pb-20 antialiased`}
+        >
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </body>
+      </html>
+    </Providers>
   );
 }
