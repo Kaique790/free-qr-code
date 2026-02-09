@@ -18,14 +18,14 @@ export function Button({
   const Comp = asChild ? Slot : "button";
 
   const base =
-    "px-4 rounded-md transition-all flex items-center justify-center gap-2 duration-200 cursor-pointer active:scale-95";
+    "px-4 rounded-md disabled:opacity-50 transition-all disabled:cursor-not-allowed flex items-center justify-center gap-2 duration-200 cursor-pointer not-disabled:active:scale-95";
 
   const variants = {
-    default: "bg-primary text-dark hover:brightness-90",
+    default: "bg-primary text-dark not-disabled:hover:brightness-90",
     outline:
-      "border border-black text-black bg-transparent hover:bg-black hover:text-white",
-    dark: "bg-dark text-white hover:opacity-80",
-    white: "bg-white text-black hover:brightness-90",
+      "border border-black text-black bg-transparent not-disabled:hover:bg-black not-disabled:hover:text-white",
+    dark: "bg-dark text-white not-disabled:hover:opacity-80",
+    white: "bg-white text-black not-disabled:hover:brightness-90",
   };
 
   const sizes = {
