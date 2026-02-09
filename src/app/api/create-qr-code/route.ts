@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         url,
-        logo_base_64: logoBase64,
+        logo_base64: logoBase64,
         logo_size: logoSize,
         bg,
         shape,
@@ -35,6 +35,7 @@ export async function POST(req: Request) {
   );
 
   if (!res.ok) {
+    console.log(res);
     return NextResponse.json(
       { error: "Generate qr-code error" },
       { status: 500 },
