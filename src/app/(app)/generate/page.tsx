@@ -10,21 +10,34 @@ export default function Generate() {
           Gerando <span className="text-primary">QRcode</span>
         </h1>
 
-        <p className="mt-4 text-center opacity-75">
-          Onde será usado o seu QRcode?
-        </p>
-
-        <div className="mt-4">
-          <div className="flex w-full gap-4">
-            <Button variant="outline" size="sm" className="flex-1/4">
-              Link
-            </Button>
-            <Button disabled variant="outline" size="sm" className="flex-1/4">
-              Redes sociais
-            </Button>
-            <Button disabled variant="outline" size="sm" className="flex-1/4">
-              Telefone
-            </Button>
+        <div className="mt-4 lg:flex lg:gap-12">
+          <div className="w-full space-y-2 lg:w-1/4">
+            <p>Onde será usado o seu QRcode?</p>
+            <div className="flex flex-col gap-4">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1/4 md:py-2 lg:flex-0"
+              >
+                Link
+              </Button>
+              <Button
+                disabled
+                variant="outline"
+                size="sm"
+                className="flex-1/4 md:py-2 lg:flex-0"
+              >
+                Redes sociais
+              </Button>
+              <Button
+                disabled
+                variant="outline"
+                size="sm"
+                className="flex-1/4 md:py-2 lg:flex-0"
+              >
+                Telefone
+              </Button>
+            </div>
           </div>
 
           <QrLinkForm />

@@ -20,6 +20,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { downloadBase64Image } from "@/utils/base64-to-img";
 
+import exampleQr from "@/assets/images/example-qr-code.png";
+
 const qrLinkFormSchema = z.object({
   url: z.url("URL inválida"),
   file: z
@@ -52,7 +54,6 @@ export function QrLinkForm() {
   });
 
   const { createQrCodeFn, isPending } = useCreateQrCode();
-
   const [createdQrCode, setCreatedQrCode] = useState<CreateQrCodeResponse>();
 
   const uploadImage = useWatch({
@@ -76,23 +77,25 @@ export function QrLinkForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-8 flex flex-col gap-4"
+      className="mt-8 flex flex-col gap-4 md:flex-row lg:mt-0 lg:flex-1"
     >
-      <div className="flex flex-col">
-        <label htmlFor="url">Sua URL</label>
-        <Input
-          id="url"
-          type="text"
-          {...register("url")}
-          placeholder="ex: https://www.meusite.com.br"
-        />
-        {errors.url && (
-          <p className="mt-2 text-sm text-red-500">{errors.url?.message}</p>
-        )}
-      </div>
+      <div className="flex flex-1 flex-col gap-4">
+        <div className="flex w-full flex-col space-y-2">
+          <label htmlFor="url">Sua URL</label>
+          <Input
+            id="url"
+            type="text"
+            {...register("url")}
+            placeholder="ex: https://www.meusite.com.br"
+          />
+          {errors.url && (
+            <p className="mt-1 text-sm text-red-500">{errors.url?.message}</p>
+          )}
+        </div>
 
-      <div className="flex flex-col">
-        <>
+        <div className="flex flex-col space-y-2">
+          <p>Adicione um logo (opcional)</p>
+
           <label
             htmlFor="logo"
             className={cn(
@@ -119,39 +122,51 @@ export function QrLinkForm() {
           />
 
           {errors.file && (
-            <p className="mt-2 text-sm text-red-500">
+            <p className="mt-1 text-sm text-red-500">
               {String(errors.file?.message)}
             </p>
           )}
-        </>
+        </div>
       </div>
 
-      {createdQrCode && (
-        <>
+      <div className="flex-1 space-y-4">
+        {createdQrCode ? (
+          <>
+            <Image
+              alt=""
+              width={600}
+              height={600}
+              src={`data:image/png;base64,${createdQrCode.image_base64}`}
+              className="mx-auto block w-full max-w-[500px]"
+            />
+
+            <Button
+              onClick={() => downloadBase64Image(createdQrCode.image_base64)}
+              type="button"
+              className="w-full"
+            >
+              Baixar QR Code <DownloadIcon />
+            </Button>
+          </>
+        ) : (
           <Image
-            alt=""
+            src={exampleQr}
             width={600}
             height={600}
-            src={`data:image/png;base64,${createdQrCode.image_base64}`}
+            alt=""
             className="mx-auto block w-full max-w-[500px]"
           />
+        )}
 
-          <Button
-            onClick={() => downloadBase64Image(createdQrCode.image_base64)}
-            type="button"
-          >
-            Baixar QR Code <DownloadIcon />
-          </Button>
-        </>
-      )}
-
-      <Button
-        variant={!!createdQrCode ? "outline" : "default"}
-        disabled={isPending}
-        type="submit"
-      >
-        Gerar QR code
-      </Button>
+        <Button
+          variant={!!createdQrCode ? "outline" : "default"}
+          disabled={isPending}
+          type="submit"
+          className="w-full"
+        >
+          Gerar QR code
+        </Button>
+      </div>
     </form>
   );
 }

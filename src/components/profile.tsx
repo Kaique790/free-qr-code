@@ -8,7 +8,7 @@ import { ProfileMenu } from "./profile-menu";
 export function Profile() {
   const session = useSession();
 
-  return session ? (
+  return session.data ? (
     <ProfileMenu />
   ) : (
     <div className="row-1 flex gap-4">

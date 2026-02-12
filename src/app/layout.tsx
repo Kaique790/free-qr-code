@@ -24,10 +24,10 @@ export default function RootLayout({
     <Providers>
       <html lang="pt-BR" className="max-w-screen overflow-x-hidden">
         <body
-          className={`${roboto.className} w-full max-w-screen overflow-x-hidden pb-20 antialiased`}
+          className={`${roboto.className} min-h-screen w-full max-w-screen overflow-x-hidden pb-20 antialiased lg:flex lg:flex-col`}
         >
           <Header />
-          <main>{children}</main>
+          <main className="">{children}</main>
           <Footer />
         </body>
       </html>
