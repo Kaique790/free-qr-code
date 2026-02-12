@@ -23,16 +23,18 @@ import { downloadBase64Image } from "@/utils/base64-to-img";
 const qrLinkFormSchema = z.object({
   url: z.url("URL inválida"),
   file: z
-    .any()
-    .refine((files) => files instanceof FileList, "Arquivo inválido")
-    .refine((files) => files.length > 0, "Adicione um logotipo!")
+    .instanceof(FileList)
+    .optional()
     .refine(
       (files) =>
+        !files ||
+        files.length === 0 ||
         ["image/png", "image/jpeg", "image/webp"].includes(files[0]?.type),
       "Formato inválido (PNG, JPG ou WEBP)",
     )
     .refine(
-      (files) => files[0]?.size <= 2 * 1024 * 1024,
+      (files) =>
+        !files || files.length === 0 || files[0]?.size <= 2 * 1024 * 1024,
       "O arquivo deve ter no máximo 2MB",
     ),
 });
@@ -59,7 +61,9 @@ export function QrLinkForm() {
   });
 
   async function onSubmit(data: QrLinkForm) {
-    const base64 = await convertToBase64(data.file);
+    const base64 = !!data.file?.length
+      ? await convertToBase64(data.file)
+      : undefined;
 
     const qrCode = await createQrCodeFn({
       logoBase64: base64,

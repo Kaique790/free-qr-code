@@ -5,8 +5,8 @@ export function convertToBase64(files: FileList): Promise<string> {
     const reader = new FileReader();
     reader.readAsDataURL(img);
 
-    reader.onload = (readerEvent) => {
-      const bas64String = readerEvent.target?.result as string;
+    reader.onload = () => {
+      const bas64String = reader.result as string;
 
       resolve(bas64String);
     };

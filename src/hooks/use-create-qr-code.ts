@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 
 export interface UseCreateQrCodeParams {
   url: string;
-  logoBase64: string;
+  logoBase64?: string;
   logoSize?: number;
   bg?: string;
   shape?: string;
@@ -16,7 +16,7 @@ export interface CreateQrCodeResponse {
 }
 
 async function createQrCode(body: UseCreateQrCodeParams) {
-  const cleanLogoBase64 = body.logoBase64.replace(/^data:.*;base64,/, "");
+  const cleanLogoBase64 = body.logoBase64?.replace(/^data:.*;base64,/, "");
 
   const res = await api.post("/create-qr-code", {
     url: body.url,
