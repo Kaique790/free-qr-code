@@ -1,6 +1,10 @@
 import { auth } from "@/lib/auth";
-import axios from "axios";
+import QRCodeStyling, { Options } from "qr-code-styling";
+import nodeCanvas from "canvas";
+import { JSDOM } from "jsdom";
+
 import { NextResponse } from "next/server";
+import { CreateQrCodeParams } from "@/app/interfaces/qrcode-details";
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -9,54 +13,37 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { url, logoBase64, bg, logoSize, shape, shapeColor, shapePadding } =
-    await req.json();
+  const { url, logoBase64 } = (await req.json()) as CreateQrCodeParams;
 
   if (!url) {
     return NextResponse.json({ error: "insufficient data" }, { status: 400 });
   }
 
-  const haslogoURL = logoBase64
-    ? "https://qrcode-generator-py.onrender.com/qrcode_logo"
-    : "https://qrcode-generator-py.onrender.com/qrcode";
+  const options: Options = {
+    width: 300,
+    height: 300,
+    data: url,
+    image: logoBase64,
+    qrOptions: {
+      errorCorrectionLevel: "H",
+    },
+    imageOptions: {
+      imageSize: 0.6,
+      margin: 2,
+    },
+  };
 
-  try {
-    const res = await axios.post(haslogoURL, {
-      url,
-      logo_base64: logoBase64 ?? null,
-      logo_size: logoSize,
-      bg,
-      shape,
-      shape_color: shapeColor,
-      shape_padding: shapePadding,
-    });
+  const qrCode = new QRCodeStyling({
+    nodeCanvas,
+    jsdom: JSDOM,
+    ...options,
+  });
 
-    return NextResponse.json(res.data);
-  } catch (error) {
-    if (!axios.isAxiosError(error)) {
-      return NextResponse.json(
-        { error: "Internal Error on Generate QR Code" },
-        { status: 500 },
-      );
-    }
+  const bufferQrCode = (await qrCode.getRawData("png")) as Buffer;
 
-    if (error.response) {
-      return NextResponse.json(
-        { error: "Error on Generate QR Code" },
-        { status: error.response.status },
-      );
-    }
-
-    if (error.request) {
-      return NextResponse.json(
-        { error: "External Server Not Response" },
-        { status: 500 },
-      );
-    }
-
-    return NextResponse.json(
-      { error: "Internal Error on Generate QR Code" },
-      { status: 500 },
-    );
-  }
+  return new NextResponse(new Uint8Array(bufferQrCode), {
+    headers: {
+      "content-Type": "image/png",
+    },
+  });
 }

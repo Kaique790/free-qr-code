@@ -11,14 +11,11 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/buttons";
-import {
-  CreateQrCodeResponse,
-  useCreateQrCode,
-} from "@/hooks/use-create-qr-code";
+import { useCreateQrCode } from "@/hooks/use-create-qr-code";
 import { convertToBase64 } from "@/utils/convert-to-base64";
 import { useState } from "react";
 import Image from "next/image";
-import { downloadBase64Image } from "@/utils/base64-to-img";
+import { downloadQr } from "@/utils/donwload-qr";
 
 import exampleQr from "@/assets/images/example-qr-code.png";
 
@@ -54,7 +51,7 @@ export function QrLinkForm() {
   });
 
   const { createQrCodeFn, isPending } = useCreateQrCode();
-  const [createdQrCode, setCreatedQrCode] = useState<CreateQrCodeResponse>();
+  const [createdQrCode, setCreatedQrCode] = useState<string>();
 
   const uploadImage = useWatch({
     control,
@@ -71,13 +68,14 @@ export function QrLinkForm() {
       url: data.url,
     });
 
-    setCreatedQrCode(qrCode);
+    const imgURL = URL.createObjectURL(qrCode);
+    setCreatedQrCode(imgURL);
   }
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-8 flex flex-col gap-4 md:flex-row lg:mt-0 lg:flex-1"
+      className="mt-8 flex flex-col gap-16 md:flex-row lg:mt-0 lg:flex-1"
     >
       <div className="flex flex-1 flex-col gap-4">
         <div className="flex w-full flex-col space-y-2">
@@ -129,19 +127,19 @@ export function QrLinkForm() {
         </div>
       </div>
 
-      <div className="flex-1 space-y-4">
+      <div className="max-w-[340px] flex-1 space-y-4">
         {createdQrCode ? (
           <>
             <Image
               alt=""
               width={600}
               height={600}
-              src={`data:image/png;base64,${createdQrCode.image_base64}`}
-              className="mx-auto block w-full max-w-[500px]"
+              src={createdQrCode}
+              className="mx-auto mb-8 block w-[90%]"
             />
 
             <Button
-              onClick={() => downloadBase64Image(createdQrCode.image_base64)}
+              onClick={() => downloadQr(createdQrCode)}
               type="button"
               className="w-full"
             >
@@ -154,7 +152,7 @@ export function QrLinkForm() {
             width={600}
             height={600}
             alt=""
-            className="mx-auto block w-full max-w-[500px]"
+            className="w-fullw-[90%] mx-auto mb-8 block"
           />
         )}
 
