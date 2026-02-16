@@ -14,8 +14,8 @@ export async function createQrCode({
   dotsType = "square",
 }: CreateQrCodeParams): Promise<string> {
   const options: Options = {
-    width: 300,
-    height: 300,
+    width: 1000,
+    height: 1000,
     data: url,
     image: logoBase64,
     dotsOptions: {
