@@ -1,4 +1,5 @@
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 import { auth } from "@/lib/auth";
 import QRCodeStyling, { Options } from "qr-code-styling";
