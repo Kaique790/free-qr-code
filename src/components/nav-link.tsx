@@ -18,15 +18,16 @@ export function NavLink({ children, className, ...props }: NavLinkProps) {
   //   const isActive = pathname === href;
 
   return (
-    <Link
-      {...props}
+    <li
       className={cn(
-        "hover:bg-primary/40 rounded-md px-3 py-2 text-white transition-colors",
+        "hover:bg-gray-2/30 md:hover:bg-gray-1 w-full transition-all duration-200 md:hover:scale-110",
         // isActive ? "text-greenPrimary font-semibold" : "text-whiteCustom",
         className,
       )}
     >
-      {children}
-    </Link>
+      <Link {...props} className="flex justify-center px-3 py-4 md:py-2.5">
+        {children}
+      </Link>
+    </li>
   );
 }

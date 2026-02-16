@@ -6,12 +6,12 @@ export default function Generate() {
   return (
     <Container className="mx-aut o mt-12 max-w-[1220px] px-8">
       <div>
-        <h1 className="text-center text-6xl font-bold">
+        <h1 className="text-5xl font-bold">
           Gerando <span className="text-primary">QRcode</span>
         </h1>
 
         <div className="mt-4 lg:flex lg:gap-12">
-          <div className="w-full space-y-2 lg:w-1/4">
+          <div className="hidden w-full space-y-2 lg:w-1/4">
             <p>Onde será usado o seu QRcode?</p>
             <div className="flex flex-col gap-4">
               <Button

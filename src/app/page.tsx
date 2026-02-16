@@ -74,7 +74,7 @@ export default function Home() {
 
             <div className="mx-auto h-px w-[100px] max-w-full bg-white/25" />
 
-            <Button variant="white" className="mx-auto w-fit">
+            <Button variant="white" className="mx-auto w-fit rounded-xl">
               Gerar com logotipo
             </Button>
           </div>

@@ -9,9 +9,11 @@ export function Profile() {
   const session = useSession();
 
   return session.data ? (
-    <ProfileMenu />
+    <div className="flex justify-end pr-8">
+      <ProfileMenu />
+    </div>
   ) : (
-    <div className="row-1 flex gap-4">
+    <div className="row-1 flex gap-4 pr-8">
       <Button className="w-24 max-w-full" size="sm" variant="outline" asChild>
         <Link href="/auth">Login</Link>
       </Button>
