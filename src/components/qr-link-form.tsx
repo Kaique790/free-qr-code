@@ -11,14 +11,14 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/buttons";
-import { useCreateQrCode } from "@/hooks/use-create-qr-code";
-import { convertToBase64 } from "@/utils/convert-to-base64";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { downloadQr } from "@/utils/donwload-qr";
-
 import exampleQr from "@/assets/images/example-qr-code.png";
+
 import { QrTypes } from "./qr-types";
+import { convertToBase64 } from "@/utils/convert-to-base64";
+import { createQrCode } from "@/utils/create-qr-code";
 
 const qrLinkFormSchema = z.object({
   url: z.url("URL inválida"),
@@ -52,29 +52,38 @@ export function QrLinkForm() {
     resolver: zodResolver(qrLinkFormSchema),
   });
 
-  const { createQrCodeFn, isPending } = useCreateQrCode();
-  const [createdQrCode, setCreatedQrCode] = useState<string>();
+  const [qrUrl, setQrUrl] = useState<string | null>(null);
 
-  const uploadImage = useWatch({
-    control,
-    name: "file",
-  });
+  const watchedUrl = useWatch({ control, name: "url" });
+  const watchedDotsType = useWatch({ control, name: "dotsType" });
+  const watchedFile = useWatch({ control, name: "file" });
 
-  async function onSubmit(data: QrLinkForm) {
-    const base64 = !!data.file?.length
-      ? await convertToBase64(data.file)
-      : undefined;
+  useEffect(() => {
+    async function generateQr() {
+      let logoBase64;
 
-    console.log(data.dotsType);
+      if (watchedFile && watchedFile.length > 0) {
+        logoBase64 = await convertToBase64(watchedFile);
+      }
 
-    const qrCode = await createQrCodeFn({
-      logoBase64: base64,
-      url: data.url,
-      dotsType: data.dotsType,
-    });
+      const url = await createQrCode({
+        url: watchedUrl || "https://free-qr-code-64.vercel.app",
+        logoBase64,
+        dotsType: watchedDotsType || "square",
+      });
 
-    const imgURL = URL.createObjectURL(qrCode);
-    setCreatedQrCode(imgURL);
+      setQrUrl((oldUrl) => {
+        if (oldUrl) URL.revokeObjectURL(oldUrl);
+        return url;
+      });
+    }
+
+    generateQr();
+  }, [watchedUrl, watchedDotsType, watchedFile]);
+
+  async function onSubmit() {
+    if (!qrUrl) return;
+    downloadQr(qrUrl);
   }
 
   return (
@@ -106,7 +115,7 @@ export function QrLinkForm() {
               errors.file && "border-solid border-red-500 text-red-500",
             )}
           >
-            {uploadImage && uploadImage.length > 0 && !errors.file ? (
+            {watchedFile && watchedFile.length > 0 && !errors.file ? (
               <>
                 Imagem anexada <CheckIcon size={20} />
               </>
@@ -139,41 +148,17 @@ export function QrLinkForm() {
       </div>
 
       <div className="flex-1 space-y-4">
-        {createdQrCode ? (
-          <>
-            <Image
-              alt=""
-              width={600}
-              height={600}
-              src={createdQrCode}
-              className="mx-auto mb-8 block w-full max-w-[440px] sm:max-w-[340px]"
-            />
+        <Image
+          alt=""
+          width={1000}
+          height={1000}
+          quality={100}
+          src={qrUrl ?? exampleQr}
+          className="mx-auto mb-8 block w-full max-w-[440px] sm:max-w-[340px]"
+        />
 
-            <Button
-              onClick={() => downloadQr(createdQrCode)}
-              type="button"
-              className="w-full"
-            >
-              Baixar QR Code <DownloadSimpleIcon size={20} />
-            </Button>
-          </>
-        ) : (
-          <Image
-            src={exampleQr}
-            width={600}
-            height={600}
-            alt=""
-            className="mx-auto mb-8 block w-full max-w-[440px] sm:max-w-[340px]"
-          />
-        )}
-
-        <Button
-          variant={!!createdQrCode ? "outline" : "default"}
-          disabled={isPending}
-          type="submit"
-          className="w-full"
-        >
-          Gerar QR code
+        <Button type="submit" className="w-full">
+          Baixar QR Code <DownloadSimpleIcon size={20} />
         </Button>
       </div>
     </form>
