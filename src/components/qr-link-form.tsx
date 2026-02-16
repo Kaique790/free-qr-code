@@ -24,7 +24,7 @@ const qrLinkFormSchema = z.object({
   url: z.url("URL inválida"),
   dotsType: z.enum(["square", "dots", "rounded"]),
   file: z
-    .instanceof(FileList)
+    .custom<FileList>()
     .optional()
     .refine(
       (files) =>
