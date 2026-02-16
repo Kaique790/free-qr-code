@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import { auth } from "@/lib/auth";
 import QRCodeStyling, { Options } from "qr-code-styling";
 import nodeCanvas from "canvas";
