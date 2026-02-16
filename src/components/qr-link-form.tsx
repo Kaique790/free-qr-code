@@ -2,7 +2,7 @@
 
 import {
   CheckIcon,
-  DownloadIcon,
+  DownloadSimpleIcon,
   UploadIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { Input } from "./ui/input";
@@ -18,9 +18,11 @@ import Image from "next/image";
 import { downloadQr } from "@/utils/donwload-qr";
 
 import exampleQr from "@/assets/images/example-qr-code.png";
+import { QrTypes } from "./qr-types";
 
 const qrLinkFormSchema = z.object({
   url: z.url("URL inválida"),
+  dotsType: z.enum(["square", "dots", "rounded"]),
   file: z
     .instanceof(FileList)
     .optional()
@@ -38,7 +40,7 @@ const qrLinkFormSchema = z.object({
     ),
 });
 
-type QrLinkForm = z.infer<typeof qrLinkFormSchema>;
+export type QrLinkForm = z.infer<typeof qrLinkFormSchema>;
 
 export function QrLinkForm() {
   const {
@@ -63,9 +65,12 @@ export function QrLinkForm() {
       ? await convertToBase64(data.file)
       : undefined;
 
+    console.log(data.dotsType);
+
     const qrCode = await createQrCodeFn({
       logoBase64: base64,
       url: data.url,
+      dotsType: data.dotsType,
     });
 
     const imgURL = URL.createObjectURL(qrCode);
@@ -79,7 +84,7 @@ export function QrLinkForm() {
     >
       <div className="flex flex-1 flex-col gap-4">
         <div className="flex w-full flex-col space-y-2">
-          <label htmlFor="url">Sua URL</label>
+          <label htmlFor="url">Sua URL:</label>
           <Input
             id="url"
             type="text"
@@ -92,7 +97,7 @@ export function QrLinkForm() {
         </div>
 
         <div className="flex flex-col space-y-2">
-          <p>Adicione um logo (opcional)</p>
+          <p>Adicione um logo (opcional):</p>
 
           <label
             htmlFor="logo"
@@ -125,9 +130,15 @@ export function QrLinkForm() {
             </p>
           )}
         </div>
+
+        <div className="flex flex-col space-y-2">
+          <p>Seu tipo de QRcode:</p>
+
+          <QrTypes control={control} />
+        </div>
       </div>
 
-      <div className="max-w-[340px] flex-1 space-y-4">
+      <div className="flex-1 space-y-4">
         {createdQrCode ? (
           <>
             <Image
@@ -135,7 +146,7 @@ export function QrLinkForm() {
               width={600}
               height={600}
               src={createdQrCode}
-              className="mx-auto mb-8 block w-[90%]"
+              className="mx-auto mb-8 block w-full max-w-[440px] sm:max-w-[340px]"
             />
 
             <Button
@@ -143,7 +154,7 @@ export function QrLinkForm() {
               type="button"
               className="w-full"
             >
-              Baixar QR Code <DownloadIcon />
+              Baixar QR Code <DownloadSimpleIcon size={20} />
             </Button>
           </>
         ) : (
@@ -152,7 +163,7 @@ export function QrLinkForm() {
             width={600}
             height={600}
             alt=""
-            className="w-fullw-[90%] mx-auto mb-8 block"
+            className="mx-auto mb-8 block w-full max-w-[440px] sm:max-w-[340px]"
           />
         )}
 

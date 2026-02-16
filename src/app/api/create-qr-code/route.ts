@@ -13,7 +13,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { url, logoBase64 } = (await req.json()) as CreateQrCodeParams;
+  const { url, logoBase64, dotsType } =
+    (await req.json()) as CreateQrCodeParams;
 
   if (!url) {
     return NextResponse.json({ error: "insufficient data" }, { status: 400 });
@@ -24,12 +25,21 @@ export async function POST(req: Request) {
     height: 300,
     data: url,
     image: logoBase64,
+    dotsOptions: {
+      type: dotsType,
+    },
+    cornersSquareOptions: {
+      type: dotsType === "square" || !dotsType ? "square" : "extra-rounded",
+    },
+    cornersDotOptions: {
+      type: dotsType === "square" || !dotsType ? "square" : "extra-rounded",
+    },
     qrOptions: {
       errorCorrectionLevel: "H",
     },
     imageOptions: {
       imageSize: 0.6,
-      margin: 2,
+      margin: 1,
     },
   };
 
