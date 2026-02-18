@@ -8,6 +8,9 @@ import bcrypt from "bcrypt";
 
 export const { auth, handlers, signIn } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  pages: {
+    signIn: "/auth",
+  },
 
   session: {
     strategy: "jwt",
@@ -37,7 +40,7 @@ export const { auth, handlers, signIn } = NextAuth({
         const cred = credentials as { email: string; password: string };
 
         if (!cred.email || !cred.password) {
-          return { errorCode: 400, error: "MissingCredentials" };
+          return null;
         }
 
         const user = await prisma.user.findUnique({
@@ -45,7 +48,7 @@ export const { auth, handlers, signIn } = NextAuth({
         });
 
         if (!user || !user.password) {
-          return { errorCode: 404, error: "UserNotFound" };
+          return null;
         }
 
         const matchPassword = await bcrypt.compare(
@@ -54,7 +57,7 @@ export const { auth, handlers, signIn } = NextAuth({
         );
 
         if (!matchPassword) {
-          return { errorCode: 401, error: "InvalidCredentials" };
+          return null;
         }
 
         return {
