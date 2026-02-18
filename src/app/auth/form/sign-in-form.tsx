@@ -14,6 +14,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.email("Digite um e-mail válido"),
@@ -31,21 +34,28 @@ export function SignInForm() {
     resolver: zodResolver(formSchema),
   });
 
+  const searchParams = useSearchParams();
+  const authError = searchParams.get("error");
+
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   function toggleShowPassword() {
     setShowPassword((state) => !state);
   }
 
   async function onSubmit(data: SignInFormData) {
+    setIsLoading(true);
     try {
-      signIn("credentials", {
+      await signIn("credentials", {
         email: data.email,
         password: data.password,
+        callbackUrl: "/generate",
       });
-    } catch (err) {
-      console.error(err);
-      alert("Erro inesperado, tente novamente.");
+    } catch {
+      toast.error("E-mail ou senha incorretos.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -59,6 +69,7 @@ export function SignInForm() {
             placeholder="ex: meuemail@gmail.com"
             id="email"
             type="email"
+            className={cn(errors.email && "border-rose-500")}
           />
           {errors.email && (
             <span className="text-sm text-rose-500">
@@ -74,7 +85,7 @@ export function SignInForm() {
               placeholder="********"
               id="password"
               type={showPassword ? "text" : "password"}
-              className="w-full"
+              className={cn("w-full", errors.password && "border-rose-500")}
             />
             <Button
               onClick={toggleShowPassword}
@@ -95,9 +106,20 @@ export function SignInForm() {
             </span>
           )}
         </div>
-        <Button className="w-full" variant="dark">
-          Entrar <ArrowRightIcon size={20} />
+        <Button disabled={isLoading} className="w-full" variant="dark">
+          {isLoading ? (
+            <>Aguarde</>
+          ) : (
+            <>
+              Entrar <ArrowRightIcon size={20} />
+            </>
+          )}
         </Button>
+        {authError && (
+          <span className="text-center font-bold text-rose-500">
+            E-mail ou senha inválidos
+          </span>
+        )}
       </div>
 
       <div className="flex items-center gap-4 py-2 opacity-40">

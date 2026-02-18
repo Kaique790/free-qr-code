@@ -6,14 +6,18 @@ import {
   EyeClosedIcon,
   EyeIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { email, z } from "zod";
+import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { GoogleBtn } from "./google-btn";
-import { headers } from "next/headers";
+import { api } from "@/lib/axios";
+import { isAxiosError } from "axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const signUpFormSchema = z
   .object({
@@ -33,20 +37,24 @@ export function SignUpForm() {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
+    control,
     trigger,
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpFormSchema),
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   function toggleShowPassword() {
     setShowPassword((state) => !state);
   }
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const passwordValue = watch("password");
+  const passwordValue = useWatch({
+    control,
+    name: "password",
+  });
 
   useEffect(() => {
     if (passwordValue) {
@@ -55,29 +63,35 @@ export function SignUpForm() {
   }, [passwordValue, trigger]);
 
   async function onSubmit(data: SignUpFormData) {
+    setIsLoading(true);
     try {
-      const response = await fetch("/api/auth/sign-up", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-        }),
+      await api.post("/auth/sign-up", {
+        email: data.email,
+        password: data.password,
       });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        alert(result.error || "Erro ao cadastrar.");
-        return;
-      }
 
       alert("Usuário cadastrado com sucesso!");
     } catch (err) {
-      console.error(err);
-      alert("Erro inesperado, tente novamente.");
+      if (isAxiosError(err)) {
+        switch (err.response?.status) {
+          case 400:
+            toast.error("Você já tem uma conta", {
+              action: {
+                label: "Fazer login",
+                onClick: () => router.push("auth"),
+              },
+            });
+            break;
+          default:
+            toast.error("Erro inesperado (tente novamente mais tarde).");
+        }
+
+        return;
+      }
+
+      toast.error("Erro inesperado (tente novamente mais tarde).");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -91,6 +105,7 @@ export function SignUpForm() {
             placeholder="ex: meuemail@gmail.com"
             id="email"
             type="email"
+            className={cn("w-full", errors.email && "border-rose-500")}
           />
           {errors.email && (
             <span className="text-sm text-rose-500">
@@ -106,7 +121,7 @@ export function SignUpForm() {
               placeholder="********"
               id="password"
               type={showPassword ? "text" : "password"}
-              className="w-full"
+              className={cn("w-full", errors.password && "border-rose-500")}
             />
             <Button
               onClick={toggleShowPassword}
@@ -133,7 +148,11 @@ export function SignUpForm() {
             {...register("confirmPassword")}
             placeholder="********"
             id="confirm-password"
-            type="password"
+            type={showPassword ? "text" : "password"}
+            className={cn(
+              "w-full",
+              errors.confirmPassword && "border-rose-500",
+            )}
           />
           {errors.confirmPassword && (
             <span className="text-sm text-rose-500">
@@ -141,8 +160,14 @@ export function SignUpForm() {
             </span>
           )}
         </div>
-        <Button className="w-full" variant="dark">
-          Cadastrar <ArrowRightIcon size={20} />
+        <Button disabled={isLoading} className="w-full" variant="dark">
+          {isLoading ? (
+            <>Aguarde</>
+          ) : (
+            <>
+              Cadastrar <ArrowRightIcon size={20} />
+            </>
+          )}
         </Button>
       </div>
 

@@ -14,22 +14,28 @@ import { AuthFormWrapper } from "./form/auth-form-wrapper";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export function AuthClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const [signUpMode, setSignUpMode] = useState(false);
+  const session = useSession();
 
-  const isSignupMode = searchParams.get("signupmode");
+  const isSignupMode = !!searchParams.get("signupmode");
 
   const onSignUpMode = useEffectEvent(() => {
-    setSignUpMode(() => !!isSignupMode);
+    setSignUpMode(() => isSignupMode);
   });
 
   useEffect(() => {
+    if (session.status === "authenticated") {
+      router.push("/generate");
+      return;
+    }
     onSignUpMode();
-  });
+  }, [session, router, isSignupMode]);
 
   function toggleAuthMode() {
     if (isSignupMode) {
@@ -76,6 +82,7 @@ export function AuthClient() {
           />
 
           <button
+            type="button"
             onClick={toggleAuthMode}
             className="hover:bg-dark/10 flex w-fit cursor-pointer items-center gap-2 rounded-md px-4 py-2 duration-200"
           >
