@@ -7,6 +7,7 @@ import heroImg from "@/assets/images/hero-mockup.png";
 
 import { Button } from "@/components/ui/buttons";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -27,12 +28,14 @@ export default function Home() {
           </p>
         </div>
 
-        <Button
-          variant="dark"
-          className="mx-auto mt-8 w-[330px] max-w-full rounded-full py-2 min-[800px]:mx-0 min-[800px]:mt-12"
-        >
-          Gerar o meu <ArrowRightIcon />
-        </Button>
+        <Link href="/generate">
+          <Button
+            variant="dark"
+            className="mx-auto mt-8 w-[330px] max-w-full rounded-full py-2 min-[800px]:mx-0 min-[800px]:mt-12"
+          >
+            Gerar o meu <ArrowRightIcon />
+          </Button>
+        </Link>
       </div>
 
       <div className="pl-8 min-[800px]:order-0 min-[800px]:col-start-2 min-[800px]:row-span-2 min-[800px]:row-start-1 min-[800px]:pl-0">
@@ -74,9 +77,11 @@ export default function Home() {
 
             <div className="mx-auto h-px w-[100px] max-w-full bg-white/25" />
 
-            <Button variant="white" className="mx-auto w-fit rounded-xl">
-              Gerar com logotipo
-            </Button>
+            <Link href="/generate">
+              <Button variant="white" className="mx-auto w-fit rounded-xl">
+                Gerar com logotipo
+              </Button>
+            </Link>
           </div>
         </article>
       </div>

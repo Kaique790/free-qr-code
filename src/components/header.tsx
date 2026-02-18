@@ -15,7 +15,7 @@ export function Header() {
         >
           <div className="max-w-[66px] py-6 pr-8">
             <Image
-              className="max-h-[50px]"
+              className="max-h-[50px] duration-300 hover:rotate-90"
               src={logo}
               width={64}
               height={64}
