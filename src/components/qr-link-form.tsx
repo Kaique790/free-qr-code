@@ -52,8 +52,14 @@ export function QrLinkForm() {
     register,
     control,
     formState: { errors },
-  } = useForm<QrLinkForm>({
+  } = useForm({
     resolver: zodResolver(qrLinkFormSchema),
+    defaultValues: {
+      url: "https://free-qr-code-64.vercel.app",
+      color: "#000",
+      logoSize: "0.4",
+      dotsType: "square",
+    },
   });
 
   const [qrUrl, setQrUrl] = useState<string | null>(null);
@@ -75,10 +81,10 @@ export function QrLinkForm() {
       }
 
       const url = await createQrCode({
-        url: watchedUrl || "https://free-qr-code-64.vercel.app",
+        url: watchedUrl,
         logoBase64,
-        dotsType: watchedDotsType || "square",
-        color: debouncedColor || "#000000",
+        dotsType: watchedDotsType,
+        color: debouncedColor,
         logoSize: Number(watchedLogoSize),
       });
 
