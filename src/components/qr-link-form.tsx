@@ -57,7 +57,7 @@ export function QrLinkForm() {
     defaultValues: {
       url: "https://free-qr-code-64.vercel.app",
       color: "#000",
-      logoSize: "0.4",
+      logoSize: "0.6",
       dotsType: "square",
     },
   });
