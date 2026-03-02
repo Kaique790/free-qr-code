@@ -24,9 +24,9 @@ export function QrDetails({ register }: QrDetailsProps) {
         <label className="font-medium" htmlFor="color">
           Tamanho do Logo:
         </label>
-        <div className="w-full pr-2 bg-gray-2/50 rounded-md">
+        <div className="bg-gray-2/50 w-full rounded-md pr-2">
           <select
-            className="w-full  p-2"
+            className="w-full p-2"
             {...register("logoSize")}
             name="logoSize"
             id="color"
